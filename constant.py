@@ -1,0 +1,6 @@
+STATUS_RETURNED = "Returned"
+STATUS_CREATED = "Created"
+STATUS_CANCELED = "Canceled"
+STATUS_RETURNING = "Returning"
+STATUS_RETURN_CHECKING = "Return Checking"
+
