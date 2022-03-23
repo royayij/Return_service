@@ -6,13 +6,11 @@ services:
     environment:
       - POSTGRES_USER=testuser
       - POSTGRES_PASSWORD=testpass
+      - POSTGRES_DB: returndb
     ports:
       - "5432:5432"
     volumes:
       - /home/r_nasiri/pgdata:/var/lib/postgresql/data
-      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-  db_admin:
-    image: adminer
-    restart: always
-    ports:
-      - "8080:8080"
+volumes:
+  db:
+    driver: local
