@@ -1,0 +1,57 @@
+service: ada
+
+provider:
+  name: google
+  stage: dev
+  runtime: python39
+  region: europe-west1
+  project: ada-return
+  # The GCF credentials can be a little tricky to set up. Luckily we've documented this for you here:
+  # https://serverless.com/framework/docs/providers/google/guide/credentials/
+  #
+  # the path to the credentials file needs to be absolute
+  credentials: ~/.config/gcloud/ada-keyfile.json
+  environment:
+    DB_USER: ${env:DB_USER}
+    DB_PASS: ${env:DB_PASS}
+    DB_ADDR: ${env:DB_ADDR}
+
+frameworkVersion: '3'
+plugins:
+  - serverless-google-cloudfunctions
+
+# needs more granular excluding in production as only the serverless provider npm
+# package should be excluded (and not the whole node_modules directory)
+package:
+  exclude:
+    - .direnv/**
+    - .envrc/**
+    - .venv/**
+    - .gitignore
+    - .git/**
+
+functions:
+  create_return:
+    handler: create_return
+    events:
+      - http: path
+
+  get_return:
+    handler: get_return
+    events:
+      - http: path
+
+  get_all_returns:
+    handler: get_all_returns
+    events:
+      - http: path
+
+  update_return_status:
+    handler: update_return_status
+    events:
+      - http: path
+
+  delete_return:
+    handler: delete_return
+    events:
+      - http: path

@@ -1,16 +1,17 @@
 import os
 
+import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 
-# The database URL is provided as an env. variable
-if 'DB_URL' in os.environ:
-    db_url = os.environ['DB_URL']
-else:
-    db_url = 'sqlite:///place.db'
-engine = create_engine(db_url)
+db_user = os.environ["DB_USER"]
+db_pass = os.environ["DB_PASS"]
+db_addr = os.environ["DB_ADDR"]
+
+engine = sqlalchemy.create_engine(f"postgresql://{db_user}:{db_pass}@{db_addr}:5432/postgres")
+
 if not database_exists(engine.url):
     create_database(engine.url)
 print(database_exists(engine.url))
