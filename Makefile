@@ -7,6 +7,7 @@
 install:
 	pip install --upgrade pip
 	pip install -r requirements.txt
+	npm install
 
 run: install
 	python main.py

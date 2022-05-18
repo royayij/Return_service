@@ -6,6 +6,7 @@ from constant import STATUS_CREATED
 from daos.return_dao import ReturnDAO
 from daos.status_dao import StatusDAO
 from db import Session
+from pubsub import submit_message
 
 class Return:
     @staticmethod
@@ -18,6 +19,7 @@ class Return:
         session.commit()
         session.refresh(return_request)
         session.close()
+        submit_message("create return", id=str(body['id']))
         return jsonify({'return_id': return_request.id}), 200
 
     @staticmethod
@@ -40,6 +42,8 @@ class Return:
                 }
                                         }
             session.close()
+            submit_message("get all return requested")
+
             return jsonify(text_out), 200
         else:
             session.close()
@@ -66,6 +70,8 @@ class Return:
                 }
             }
             session.close()
+            submit_message("get return requested", id=str(r_id))
+            
             return jsonify(text_out), 200
         else:
             session.close()
@@ -77,6 +83,7 @@ class Return:
         effected_rows = session.query(ReturnDAO).filter(ReturnDAO.id == r_id).delete()
         session.commit()
         session.close()
+        submit_message("delete return requested", id=str(r_id))
         if effected_rows == 0:
             return jsonify({'message': f'There is no return request with id {r_id}'}), 404
         else:
